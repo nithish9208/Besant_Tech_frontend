@@ -1,0 +1,51 @@
+<body>
+    <h1 id='sample'>This is a sample heading for manipulation</h1>
+    <button onclick="changeHeading()">Change Heading Text</button>
+    <p class="description">This is a sample paragraph for manipulation.</p>
+    <input id="input1" placeholder="enter the number" type="number">
+    <input id="input2" placeholder="enter the second number" type="number">
+    <button onclick="sumNumbers()">Sum Numbers</button>
+    <button onclick="getdata()">Get Data from API</button>
+    <h1 id="change_content"></h1>
+    <input id="change_example" placeholder="..........." onkeyup="keyupexample()">
+    <div id="example">
+        <button onclick="example()">Create Element Example</button>
+    </div>
+    <script>
+        function changeHeading() {
+            document.getElementById('sample').innerText = 'Heading Text Changed!';
+        }
+
+        function sumNumbers() {
+        let input1 = document.getElementById('input1').value;
+        let input2 = document.getElementById('input2').value;  
+        console.log(Number(input1) + Number(input2));
+        let htag = document.createElement('h3');
+        htag.innerText = 'The sum is ' + (Number(input1) + Number(input2));
+        document.body.appendChild(htag);
+        }
+
+        function keyupexample() {
+            let inputText = document.getElementById('change_example').value;
+            let h1val = document.getElementById('change_content');
+            h1val.textContent = inputText;
+        }
+    
+    function example() {
+        let val1 = document.createElement('h1');
+        let val2 = document.createTextNode('This is created using createElement and createTextNode');
+        let divexample = document.getElementById('example');
+        val1.textContent = 'This is created using createElement and createTextNode';
+        val2.textContent = 'This is created using createElement and createTextNode';
+        divexample.append(val1);
+        divexample.append(val2);
+    }
+
+    function getdata() {
+        let response = avail.fetch('https://dummyjson.com/products');
+        response.then((data) => data.json()).then((result) => console.log(result));
+
+    }
+
+    </script>
+</body>

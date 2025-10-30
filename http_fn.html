@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Modern DOM & CRUD Example</title>
+  <style>
+    * { font-family: "Poppins", sans-serif; box-sizing: border-box; }
+    body { background: #f5f7fa; color: #333; margin: 40px; }
+    h1, h2 { text-align: center; color: #2c3e50; }
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    input, button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      margin: 5px;
+    }
+    input {
+      width: 45%;
+      border: 1px solid #ddd;
+    }
+    button {
+      cursor: pointer;
+      background: #3498db;
+      color: white;
+      font-weight: 500;
+    }
+    button:hover { background: #2980b9; }
+    .output {
+      background: #f0f0f0;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>✨ Modern DOM & CRUD Operations</h1>
+
+  <!-- DOM Manipulation Section -->
+  <div class="card">
+    <h2>DOM Manipulation</h2>
+    <p id="heading">Hello, this is a sample heading!</p>
+    <button onclick="changeHeading()">Change Heading</button>
+
+    <div>
+      <input id="num1" type="number" placeholder="Enter number 1">
+      <input id="num2" type="number" placeholder="Enter number 2">
+      <button onclick="calculateSum()">Sum</button>
+    </div>
+
+    <div>
+      <input id="liveInput" placeholder="Type something..." onkeyup="liveChange()">
+      <h3 id="liveText"></h3>
+    </div>
+
+    <button onclick="createElementExample()">Create Element Example</button>
+    <div id="newElementContainer"></div>
+  </div>
+
+  <!-- CRUD Section -->
+  <div class="card">
+    <h2>API CRUD Operations</h2>
+    <div>
+      <button onclick="getData()">GET</button>
+      <button onclick="postData()">POST</button>
+      <button onclick="putData()">PUT</button>
+      <button onclick="patchData()">PATCH</button>
+      <button onclick="deleteData()">DELETE</button>
+    </div>
+    <div id="output" class="output"></div>
+  </div>
+
+  <script>
+    const output = document.getElementById("output");
+    const API_URL = "https://dummyjson.com/products";
+
+    // 🎯 DOM Manipulation Functions
+    const changeHeading = () => {
+      document.getElementById("heading").innerText = "Heading text changed dynamically! 🎉";
+    };
+
+    const calculateSum = () => {
+      const n1 = Number(document.getElementById("num1").value);
+      const n2 = Number(document.getElementById("num2").value);
+      const sum = n1 + n2;
+
+      const result = document.createElement("p");
+      result.textContent = `Sum = ${sum}`;
+      result.style.color = "#27ae60";
+      document.querySelector(".card").appendChild(result);
+    };
+
+    const liveChange = () => {
+      const val = document.getElementById("liveInput").value;
+      document.getElementById("liveText").textContent = val;
+    };
+
+    const createElementExample = () => {
+      const div = document.getElementById("newElementContainer");
+      const newEl = document.createElement("h4");
+      newEl.textContent = "This element was created using JavaScript 🚀";
+      newEl.style.color = "#9b59b6";
+      div.appendChild(newEl);
+    };
+
+    // 🌐 CRUD Operations (Fetch API)
+
+    const getData = () => {
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          output.textContent = JSON.stringify(data.products.slice(0, 3), null, 2);
+        })
+        .catch(err => output.textContent = "❌ Error: " + err);
+    };
+
+    const postData = () => {
+      fetch(API_URL + "/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: "Modern Product", price: 299 })
+      })
+      .then(res => res.json())
+      .then(data => output.textContent = "✅ POST:\n" + JSON.stringify(data, null, 2));
+    };
+
+    const putData = () => {
+      fetch(API_URL + "/1", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: "Updated via PUT", price: 199 })
+      })
+      .then(res => res.json())
+      .then(data => output.textContent = "🟦 PUT:\n" + JSON.stringify(data, null, 2));
+    };
+
+    const patchData = () => {
+      fetch(API_URL + "/1", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ price: 159 })
+      })
+      .then(res => res.json())
+      .then(data => output.textContent = "🟣 PATCH:\n" + JSON.stringify(data, null, 2));
+    };
+
+    const deleteData = () => {
+      fetch(API_URL + "/1", { method: "DELETE" })
+      .then(res => res.json())
+      .then(data => output.textContent = "🟥 DELETE:\n" + JSON.stringify(data, null, 2));
+    };
+  </script>
+</body>
+</html>
